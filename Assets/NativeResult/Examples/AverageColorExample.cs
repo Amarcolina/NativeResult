@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Unity.Jobs;
 using Unity.Burst;
 using Unity.Mathematics;
 using Unity.Collections;
-using UnityEngine.Profiling;
 
 public class AverageColorExample : MonoBehaviour {
 
@@ -20,26 +17,23 @@ public class AverageColorExample : MonoBehaviour {
   private Texture2D _texture;
   private NativeArray<Color> _colors;
 
-  private Result<Color> naiveSum;
-  private Result<Color, Sum> smartSum;
+  private Result<Color, Sum> sum;
 
   private void OnEnable() {
     _texture = new Texture2D(resolution, resolution, TextureFormat.RGBAFloat, mipChain: false, linear: true);
-    _texture.filterMode = FilterMode.Point;
+    _texture.filterMode = FilterMode.Bilinear;
     _texture.wrapMode = TextureWrapMode.Clamp;
 
     _colors = _texture.GetRawTextureData<Color>();
 
-    naiveSum = new Result<Color>(Allocator.Persistent);
-    smartSum = new Result<Color, Sum>(Allocator.Persistent);
+    sum = new Result<Color, Sum>(Allocator.Persistent);
 
     Unity.Jobs.LowLevel.Unsafe.JobsUtility.JobCompilerEnabled = true;
     Unity.Jobs.LowLevel.Unsafe.JobsUtility.JobDebuggerEnabled = false;
   }
 
   private void OnDisable() {
-    naiveSum.Dispose();
-    smartSum.Dispose();
+    sum.Dispose();
   }
 
   private void Update() {
@@ -52,27 +46,14 @@ public class AverageColorExample : MonoBehaviour {
 
     _texture.Apply();
 
-    Color averageColor;
+    sum.Reset();
 
-    if (useResultOp) {
-      smartSum.Reset();
+    new SumColorsWithResultJob() {
+      colors = _colors,
+      sum = sum
+    }.Schedule(_colors.Length, resolution).Complete();
 
-      new SumColorsWithResultJob() {
-        colors = _colors,
-        sum = smartSum
-      }.Schedule(_colors.Length, resolution).Complete();
-
-      averageColor = smartSum.Value / (resolution * resolution);
-    } else {
-      naiveSum.Value = new Color(0, 0, 0, 0);
-
-      new SumColorsNaiveJob() {
-        colors = _colors,
-        sum = naiveSum
-      }.Schedule().Complete();
-
-      averageColor = naiveSum.Value / (resolution * resolution);
-    }
+    Color averageColor = sum.Value / (resolution * resolution);
 
     textureQuad.material.mainTexture = _texture;
     averageQuad.material.color = averageColor;
@@ -103,20 +84,6 @@ public class AverageColorExample : MonoBehaviour {
 
       return math.saturate(noise.srnoise(offsetPos + new float2(time, time), time + offset) +
                            noise.srnoise(offsetPos - new float2(time, time), time + offset));
-    }
-  }
-
-  [BurstCompile]
-  public struct SumColorsNaiveJob : IJob {
-
-    [ReadOnly]
-    public NativeArray<Color> colors;
-    public Result<Color> sum;
-
-    public void Execute() {
-      for (int i = 0; i < colors.Length; i++) {
-        sum.Value = sum.Value + colors[i];
-      }
     }
   }
 
