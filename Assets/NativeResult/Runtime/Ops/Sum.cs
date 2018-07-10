@@ -18,7 +18,8 @@ namespace Unity.Collections {
                       IComutativeOp<double>,
                       IComutativeOp<Vector2>,
                       IComutativeOp<Vector3>,
-                      IComutativeOp<Vector4> {
+                      IComutativeOp<Vector4>,
+                      IComutativeOp<Color> {
 
     public void Combine(ref int curr, ref int value) {
       curr += value;
@@ -90,6 +91,10 @@ namespace Unity.Collections {
       curr += value;
     }
 
+    public void Combine(ref Color curr, ref Color value) {
+      curr += value;
+    }
+
     public void GetIdentity(out int identity) {
       identity = 0;
     }
@@ -152,6 +157,10 @@ namespace Unity.Collections {
 
     public void GetIdentity(out Vector4 identity) {
       identity = new Vector4(0, 0, 0, 0);
+    }
+
+    public void GetIdentity(out Color identity) {
+      identity = new Color(0, 0, 0, 0);
     }
   }
 }

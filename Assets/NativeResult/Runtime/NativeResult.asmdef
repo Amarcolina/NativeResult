@@ -1,7 +1,8 @@
 {
     "name": "NativeResult",
     "references": [
-        "Unity.Mathematics"
+        "Unity.Mathematics",
+        "Unity.Burst"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],

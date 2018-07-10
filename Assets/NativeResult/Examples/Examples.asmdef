@@ -1,0 +1,12 @@
+{
+    "name": "NewAssembly",
+    "references": [
+        "NativeResult",
+        "Unity.Burst",
+        "Unity.Mathematics"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
