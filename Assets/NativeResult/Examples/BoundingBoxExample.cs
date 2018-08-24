@@ -111,7 +111,7 @@ public class BoundingBoxExample : MonoBehaviour {
     public Result<Bounds, MaximumBounds>.Concurrent bounds;
 
     public void Execute(int index) {
-      bounds.Combine(new Bounds(particles[index], Vector3.zero));
+      bounds.Write(new Bounds(particles[index], Vector3.zero));
     }
   }
 

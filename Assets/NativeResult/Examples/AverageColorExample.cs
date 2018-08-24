@@ -95,7 +95,7 @@ public class AverageColorExample : MonoBehaviour {
     public Result<Color, Sum>.Concurrent sum;
 
     public void Execute(int index) {
-      sum.Combine(colors[index]);
+      sum.Write(colors[index]);
     }
   }
 }

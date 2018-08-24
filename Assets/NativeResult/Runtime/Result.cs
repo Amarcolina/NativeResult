@@ -208,7 +208,7 @@ namespace Unity.Collections {
     /// 
     /// This operation requires write access.
     /// </summary>
-    public void Combine(T value) {
+    public void Write(T value) {
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
       AtomicSafetyHandle.CheckWriteAndThrow(m_Safety);
 #endif
@@ -309,7 +309,7 @@ namespace Unity.Collections {
       /// 
       /// This operation requires write access.
       /// </summary>
-      public void Combine(T value) {
+      public void Write(T value) {
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
         AtomicSafetyHandle.CheckWriteAndThrow(m_Safety);
 #endif
