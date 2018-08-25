@@ -288,7 +288,7 @@ MonoBehaviour:
   scatterRadius: 1.39
   size: 0.09
   mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
-  material: {fileID: 2100000, guid: 7c6937c87f51ec74cb427b156d723500, type: 2}
+  material: {fileID: 2100000, guid: 9d3ccda016177de4daab650b11c815af, type: 2}
 --- !u!4 &1586290703
 Transform:
   m_ObjectHideFlags: 0
