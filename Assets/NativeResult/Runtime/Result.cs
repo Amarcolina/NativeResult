@@ -280,11 +280,11 @@ namespace Unity.Collections {
       private Op m_Op;
 
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
-      AtomicSafetyHandle m_Safety;
+      private AtomicSafetyHandle m_Safety;
 #endif
 
       [NativeSetThreadIndex]
-      int m_ThreadIndex;
+      private int m_ThreadIndex;
 
       public static implicit operator Concurrent(Result<T, Op> result) {
         Concurrent concurrent;
