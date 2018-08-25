@@ -29,20 +29,20 @@ namespace Unity.Collections {
     /// The result will use the default value of type T as its
     /// initial value.
     /// </summary>
-    public Result(Allocator allocator) : this(default(T), allocator) { }
+    public Result(Allocator allocator) : this(allocator, default(T)) { }
 
     /// <summary>
     /// Allocates a new Result with a given initial value, and a given
     /// allocator.
     /// </summary>
-    public Result(T value, Allocator allocator) : this(value, allocator, 1) { }
+    public Result(T value, Allocator allocator) : this(allocator, value) { }
 
-    private Result(T value, Allocator allocator, int stackDepth) {
+    private Result(Allocator allocator, T value) {
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
       if (!UnsafeUtility.IsBlittable<T>()) {
         throw new ArgumentException(string.Format("{0} used in Result<{0}> must be blittable", typeof(T)));
       }
-      DisposeSentinel.Create(out m_Safety, out m_DisposeSentinel, stackDepth);
+      DisposeSentinel.Create(out m_Safety, out m_DisposeSentinel, 1);
 #endif
 
       unsafe {

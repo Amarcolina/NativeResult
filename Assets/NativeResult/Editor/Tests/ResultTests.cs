@@ -2,14 +2,20 @@
 
 namespace Unity.Collections {
   using Jobs;
+  using Jobs.LowLevel.Unsafe;
 
   public class ResultTests {
+
+    [SetUp]
+    public void SetUp() {
+      JobsUtility.JobDebuggerEnabled = true;
+    }
 
     [Test]
     public void DefaultResultIsInvalid() {
       Result<int> result = default(Result<int>);
 
-      Assert.That(result.IsCreated, Is.False); ;
+      Assert.That(result.IsCreated, Is.False);
     }
 
     [Test]
@@ -19,9 +25,11 @@ namespace Unity.Collections {
                                     Allocator allocator) {
       Result<int> result = new Result<int>(allocator);
 
-      Assert.That(result.IsCreated, Is.True);
-
-      result.Dispose();
+      try {
+        Assert.That(result.IsCreated, Is.True);
+      } finally {
+        result.Dispose();
+      }
 
       Assert.That(result.IsCreated, Is.False);
     }
@@ -30,13 +38,16 @@ namespace Unity.Collections {
     public void ResultSetGetMainThread() {
       Result<int> result = new Result<int>(Allocator.Temp);
 
-      Assert.That(result.Value, Is.EqualTo(default(int)));
+      try {
+        Assert.That(result.Value, Is.EqualTo(default(int)));
 
-      result.Value = 23;
+        result.Value = 23;
 
-      Assert.That(result.Value, Is.EqualTo(23));
+        Assert.That(result.Value, Is.EqualTo(23));
 
-      result.Dispose();
+      } finally {
+        result.Dispose();
+      }
     }
 
     [Test]
@@ -47,37 +58,43 @@ namespace Unity.Collections {
       Result<int> src = new Result<int>(Allocator.TempJob);
       Result<int> dst = new Result<int>(Allocator.TempJob);
 
-      src.Value = SRC_VAL;
-      dst.Value = DST_VAL;
+      try {
+        src.Value = SRC_VAL;
+        dst.Value = DST_VAL;
 
-      new SetGetJob() {
-        src = src,
-        dst = dst
-      }.Schedule().Complete();
+        new SetGetJob() {
+          src = src,
+          dst = dst
+        }.Schedule().Complete();
 
-      Assert.That(src.Value, Is.EqualTo(SRC_VAL));
-      Assert.That(dst.Value, Is.EqualTo(SRC_VAL));
+        Assert.That(src.Value, Is.EqualTo(SRC_VAL));
+        Assert.That(dst.Value, Is.EqualTo(SRC_VAL));
 
-      src.Dispose();
-      dst.Dispose();
+      } finally {
+        src.Dispose();
+        dst.Dispose();
+      }
     }
 
     [Test]
     public void ConcurrentWritesThrows() {
       Result<int> result = new Result<int>(Allocator.TempJob);
 
-      var writeJob = new WriteToResultJob() {
-        result = result
-      }.Schedule();
-
-      Assert.That(() => {
-        new WriteToResultJob() {
+      try {
+        var writeJob = new WriteToResultJob() {
           result = result
         }.Schedule();
-      }, Throws.InvalidOperationException);
 
-      writeJob.Complete();
-      result.Dispose();
+        Assert.That(() => {
+          new WriteToResultJob() {
+            result = result
+          }.Schedule();
+        }, Throws.InvalidOperationException);
+
+        writeJob.Complete();
+      } finally {
+        result.Dispose();
+      }
     }
 
     [Test]
@@ -89,30 +106,33 @@ namespace Unity.Collections {
       Result<int> dst1 = new Result<int>(Allocator.TempJob);
       Result<int> dst2 = new Result<int>(Allocator.TempJob);
 
-      src.Value = SRC_VAL;
-      dst1.Value = DST_VAL;
-      dst2.Value = DST_VAL;
+      try {
+        src.Value = SRC_VAL;
+        dst1.Value = DST_VAL;
+        dst2.Value = DST_VAL;
 
-      var job1 = new SetGetJob() {
-        src = src,
-        dst = dst1
-      }.Schedule();
+        var job1 = new SetGetJob() {
+          src = src,
+          dst = dst1
+        }.Schedule();
 
-      var job2 = new SetGetJob() {
-        src = src,
-        dst = dst2
-      }.Schedule();
+        var job2 = new SetGetJob() {
+          src = src,
+          dst = dst2
+        }.Schedule();
 
-      job1.Complete();
-      job2.Complete();
+        job1.Complete();
+        job2.Complete();
 
-      Assert.That(src.Value, Is.EqualTo(SRC_VAL));
-      Assert.That(dst1.Value, Is.EqualTo(SRC_VAL));
-      Assert.That(dst2.Value, Is.EqualTo(SRC_VAL));
+        Assert.That(src.Value, Is.EqualTo(SRC_VAL));
+        Assert.That(dst1.Value, Is.EqualTo(SRC_VAL));
+        Assert.That(dst2.Value, Is.EqualTo(SRC_VAL));
 
-      src.Dispose();
-      dst1.Dispose();
-      dst2.Dispose();
+      } finally {
+        src.Dispose();
+        dst1.Dispose();
+        dst2.Dispose();
+      }
     }
 
     [Test]
