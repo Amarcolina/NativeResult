@@ -12,7 +12,7 @@ The NativeArray<T> with a length of 1 has been the goto method for getting compu
 
 ## Result<T, Op> ##
 
-While Result<T> is a simple convinience, Result<T, Op> is the real magic sauce.  Currently if you want multiple threads to contribute to a single result, there are not exactly any built in ways to do that.  If you want to sum up multiple values accross different threads, there isn't really a built-in way that can be accomplished.  Result<T, Op> is a generic data structure that allows multiple threads to contribute to a _single_ result in parallel.
+While `Result<T>` is a simple convinience, Result<T, Op> is the real magic sauce.  Currently if you want multiple threads to contribute to a single result, there are not exactly any built in ways to do that.  If you want to sum up multiple values accross different threads, there isn't really a built-in way that can be accomplished.  Result<T, Op> is a generic data structure that allows multiple threads to contribute to a _single_ result in parallel.
 
 For example, Result<int, Sum> is a container that represents a single integer result.  This container supports the Sum operation, and allows jobs to add values to the result from multiple threads at the same time.  For example, here is a simple job to add up all the values in an array in parallel:
 
