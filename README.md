@@ -57,5 +57,5 @@ Technically, it supports any operation that is Commutative (order doesn't matter
 
 ## Examples ##
 
-![](http://i.imgur.com/qnE5AZw.gifv)
-![](http://i.imgur.com/BblwuG4.gifv)
+![](https://i.imgur.com/qnE5AZw.gif)
+![](https://i.imgur.com/BblwuG4.gif)
