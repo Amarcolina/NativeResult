@@ -35,12 +35,14 @@ namespace Unity.Collections {
     /// Allocates a new Result with a given initial value, and a given
     /// allocator.
     /// </summary>
-    public Result(T value, Allocator allocator) {
+    public Result(T value, Allocator allocator) : this(value, allocator, 1) { }
+
+    private Result(T value, Allocator allocator, int stackDepth) {
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
       if (!UnsafeUtility.IsBlittable<T>()) {
         throw new ArgumentException(string.Format("{0} used in Result<{0}> must be blittable", typeof(T)));
       }
-      DisposeSentinel.Create(out m_Safety, out m_DisposeSentinel, 0);
+      DisposeSentinel.Create(out m_Safety, out m_DisposeSentinel, stackDepth);
 #endif
 
       unsafe {
