@@ -16,7 +16,6 @@ While `Result<T>` is a simple convinience, `Result<T,Op>` is the real magic sauc
 
 For example, `Result<int,Sum>` is a container that represents a single integer result.  This container supports the Sum operation, and allows jobs to add values to the result from multiple threads at the same time.  For example, here is a simple job to add up all the values in an array in parallel:
 
-
     public struct AddValues : IJobParallelFor {
     	[ReadOnly]
     	public NativeArray<int> values;
@@ -26,6 +25,19 @@ For example, `Result<int,Sum>` is a container that represents a single integer r
     	public void Execute(int i) {
     		sum.Write(values[i]);
     	}
+    }
+	
+    public void Update() {
+      var sum = new Result<int, Sum>(Allocator.Temp);
+    
+      new AddValues() {
+        values = values,
+        sum = sum
+      }.Schedule(values.Length, 32).Complete();
+    
+      Debug.Log("The sum is " + sum.Value);
+    
+      sum.Dispose();
     }
 	
 Part of the magic of `Result<T,Op>` is that it doesn't just allow taking the sum of integers, it supports floats as well!  In fact, it supports doubles, Vector2, Vector3, and all the rest of the things you might want to sum.  And is easily extensible if you wanted to sum things not currently implemented here.  And in addition, `Result<T,Op>` doesn't just support adding things up, it supports lots of different operations.  For example, here is how you find the maximum value of an array of doubles in parallel:
