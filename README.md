@@ -54,3 +54,8 @@ Part of the magic of `Result<T,Op>` is that it doesn't just allow taking the sum
     }
 
 Technically, it supports any operation that is Commutative (order doesn't matter), and has an Identity element.  For example, addition is supported because addition is comutative, and addition has an identity element of 0.
+
+## Examples ##
+
+<img src="https://imgur.com/qnE5AZw">
+<img src="https://imgur.com/BblwuG4">
