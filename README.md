@@ -59,8 +59,8 @@ Technically, it supports any operation that is Commutative (order doesn't matter
 
 ![](https://i.imgur.com/BblwuG4.gif)
 
-This is an example of using a Result<Color,Sum> to add up all of the colors in a texture to calculate the average.  The quad on the left is procedurally generated in one job, and then a second job calculates in parallel the average color to be displayed on the right quad.
+This is an example of using a `Result<Color,Sum>` to add up all of the colors in a texture to calculate the average.  The quad on the left is procedurally generated in one job, and then a second job calculates in parallel the average color to be displayed on the right quad.
 
 ![](https://i.imgur.com/qnE5AZw.gif)
 
-This is an example of using a Result<Bounds, MaximumBounds> to calculate the maximum bounds of a large number of particles.  The particles are simulated procedurally in one job, and then a second job calculates the bounding box of all of the particles in parallel.
+This is an example of using a `Result<Bounds,MaximumBounds>` to calculate the maximum bounds of a large number of particles.  The particles are simulated procedurally in one job, and then a second job calculates the bounding box of all of the particles in parallel.
