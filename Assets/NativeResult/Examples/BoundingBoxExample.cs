@@ -87,9 +87,9 @@ public class BoundingBoxExample : MonoBehaviour {
 
     private float3 getCenter(float time) {
       float3 center;
-      center.x = noise.srnoise(new float2(time * 2.4f, time * 1.2f), time * 0.3f) * 2 - 1;
-      center.y = noise.srnoise(new float2(time * 0.8f, time * 0.2f), time * 0.5f) * 2 - 1;
-      center.z = noise.srnoise(new float2(time * 1.4f, time * 2.2f), time * 0.2f) * 2 - 1;
+      center.x = noise.srnoise(new float2(time * 2.4f, time * 1.2f), time * 0.3f) * 2;
+      center.y = noise.srnoise(new float2(time * 0.8f, time * 0.2f), time * 0.5f) * 2;
+      center.z = noise.srnoise(new float2(time * 1.4f, time * 2.2f), time * 0.2f) * 2;
       return center;
     }
 
@@ -97,9 +97,9 @@ public class BoundingBoxExample : MonoBehaviour {
       float oTime = (time * 0.3f + index * 0.0005f);
 
       float3 offset;
-      offset.x = noise.srnoise(new float2(oTime * 1.4f, oTime * 3.1f), oTime * 1.3f) * 2 - 1;
-      offset.y = noise.srnoise(new float2(oTime * 3.3f, oTime * 1.5f), oTime * 1.5f) * 2 - 1;
-      offset.z = noise.srnoise(new float2(oTime * 0.4f, oTime * 3.2f), oTime * 1.2f) * 2 - 1;
+      offset.x = noise.srnoise(new float2(oTime * 1.4f, oTime * 3.1f), oTime * 1.3f) * 2;
+      offset.y = noise.srnoise(new float2(oTime * 3.3f, oTime * 1.5f), oTime * 1.5f) * 2;
+      offset.z = noise.srnoise(new float2(oTime * 0.4f, oTime * 3.2f), oTime * 1.2f) * 2;
       return offset * scatterRadius;
     }
   }
