@@ -148,7 +148,7 @@ namespace Unity.Collections {
         throw new ArgumentException(string.Format("{0} used in Result<{0}, {1}> must be blittable", typeof(T), typeof(Op)));
       }
       if (UnsafeUtility.SizeOf<T>() > JobsUtility.CacheLineSize) {
-        throw new ArgumentException(string.Format("{0} used in Result<{0}, {1}> had a size of {2} which is greater than the maximum size of {4}",
+        throw new ArgumentException(string.Format("{0} used in Result<{0}, {1}> had a size of {2} which is greater than the maximum size of {3}",
                                                   typeof(T),
                                                   typeof(Op),
                                                   UnsafeUtility.SizeOf<T>(),
