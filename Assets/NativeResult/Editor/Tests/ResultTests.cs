@@ -35,6 +35,17 @@ namespace Unity.Collections {
     }
 
     [Test]
+    public void TestDoubleFree() {
+      Result<int> result = new Result<int>(Allocator.Temp);
+
+      result.Dispose();
+
+      Assert.That(() => {
+        result.Dispose();
+      }, Throws.InvalidOperationException);
+    }
+
+    [Test]
     public void ResultSetGetMainThread() {
       Result<int> result = new Result<int>(Allocator.Temp);
 
@@ -44,7 +55,6 @@ namespace Unity.Collections {
         result.Value = 23;
 
         Assert.That(result.Value, Is.EqualTo(23));
-
       } finally {
         result.Dispose();
       }
@@ -77,13 +87,21 @@ namespace Unity.Collections {
     }
 
     [Test]
-    public void ConcurrentWritesThrows() {
+    public void ConcurrentReadWriteThrows() {
       Result<int> result = new Result<int>(Allocator.TempJob);
 
       try {
         var writeJob = new WriteToResultJob() {
           result = result
         }.Schedule();
+
+        Assert.That(() => {
+          int tmp = result.Value;
+        }, Throws.InvalidOperationException);
+
+        Assert.That(() => {
+          result.Value = 5;
+        }, Throws.InvalidOperationException);
 
         Assert.That(() => {
           new WriteToResultJob() {
