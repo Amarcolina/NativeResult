@@ -4,7 +4,7 @@ This small library is for getting results from a job back onto the main thread o
 
  - Using a single allocated `Result<T>` that is conceptually a wrapper around a `NativeArray<T>` with a length of 1.
  
- - Using a smart `Result<T, Op>` that allows multiple jobs to collectively create a result in parallel.  For example, a `Result<int, Sum>` would allow an IJobParallelFor to add up a bunch of numbers in parallel.
+ - Using a smart `Result<T,Op>` that allows multiple jobs to collectively create a result in parallel.  For example, a `Result<int,Sum>` would allow an IJobParallelFor to add up a bunch of numbers in parallel.
  
 ## Result<T> ##
 
@@ -12,9 +12,9 @@ The `NativeArray<T>` with a length of 1 has been the goto method for getting com
 
 ## Result<T, Op> ##
 
-While `Result<T>` is a simple convinience, `Result<T, Op>` is the real magic sauce.  Currently if you want multiple threads to contribute to a single result, there are not exactly any built in ways to do that.  If you want to sum up multiple values accross different threads, there isn't really a built-in way that can be accomplished.  `Result<T, Op>` is a generic data structure that allows multiple threads to contribute to a _single_ result in parallel.
+While `Result<T>` is a simple convinience, `Result<T,Op>` is the real magic sauce.  Currently if you want multiple threads to contribute to a single result, there are not exactly any built in ways to do that.  If you want to sum up multiple values accross different threads, there isn't really a built-in way that can be accomplished.  `Result<T,Op>` is a generic data structure that allows multiple threads to contribute to a _single_ result in parallel.
 
-For example, `Result<int, Sum>` is a container that represents a single integer result.  This container supports the Sum operation, and allows jobs to add values to the result from multiple threads at the same time.  For example, here is a simple job to add up all the values in an array in parallel:
+For example, `Result<int,Sum>` is a container that represents a single integer result.  This container supports the Sum operation, and allows jobs to add values to the result from multiple threads at the same time.  For example, here is a simple job to add up all the values in an array in parallel:
 
 
     public struct AddValues : IJobParallelFor {
@@ -28,7 +28,7 @@ For example, `Result<int, Sum>` is a container that represents a single integer 
     	}
     }
 	
-Part of the magic of `Result<T, Op>` is that it doesn't just allow taking the sum of integers, it supports floats as well!  In fact, it supports doubles, Vector2, Vector3, and all the rest of the things you might want to sum.  And is easily extensible if you wanted to sum things not currently implemented here.  And in addition, `Result<T, Op>` doesn't just support adding things up, it supports lots of different operations.  For example, here is how you find the maximum value of an array of doubles in parallel:
+Part of the magic of `Result<T,Op>` is that it doesn't just allow taking the sum of integers, it supports floats as well!  In fact, it supports doubles, Vector2, Vector3, and all the rest of the things you might want to sum.  And is easily extensible if you wanted to sum things not currently implemented here.  And in addition, `Result<T,Op>` doesn't just support adding things up, it supports lots of different operations.  For example, here is how you find the maximum value of an array of doubles in parallel:
 
     public struct FindMaximum : IJobParallelFor {
     	[ReadOnly]
