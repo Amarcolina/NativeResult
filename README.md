@@ -57,5 +57,5 @@ Technically, it supports any operation that is Commutative (order doesn't matter
 
 ## Examples ##
 
-<img src="https://imgur.com/qnE5AZw">
-<img src="https://imgur.com/BblwuG4">
+<img src="https://i.imgur.com/qnE5AZw.gifv">
+<img src="https://i.imgur.com/BblwuG4.gifv">
