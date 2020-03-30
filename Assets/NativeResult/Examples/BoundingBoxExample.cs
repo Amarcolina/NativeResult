@@ -126,8 +126,6 @@ public class BoundingBoxExample : MonoBehaviour {
 
             Bounds boundingBox = _bounds.Value;
 
-            Debug.Log(boundingBox.center + " : " + boundingBox.size);
-
             Gizmos.color = Color.red;
             Gizmos.DrawWireCube(boundingBox.center, boundingBox.size);
         }
